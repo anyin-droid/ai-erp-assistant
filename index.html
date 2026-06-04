@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI ERP Assistant</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        input{
+            width: 400px;
+            padding: 10px;
+        }
+
+        button{
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        pre{
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+            table{
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th{
+                background-color: #f4f4f4;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <h1>AI ERP Assistant</h1>
+
+    <input 
+        type="text"
+        id="question"
+        placeholder="請輸入查詢需求"
+    >
+
+    <button onclick="askAI()">
+        查詢
+    </button>
+
+    <h2>查詢結果</h2>
+
+    <pre id="result"></pre>
+
+    <script>
+
+        async function askAI(){
+
+            const question = document.getElementById("question").value
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/ask",
+                {
+                    method: "POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body: JSON.stringify({
+                        question: question
+                    })
+                }
+            )
+
+            const data = await response.json()
+
+            const resultDiv = document.getElementById("result")
+
+// Loading
+resultDiv.innerHTML = "AI 查詢中..."
+
+try{
+
+    const response = await fetch(
+        "http://127.0.0.1:8000/ask",
+        {
+            method: "POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body: JSON.stringify({
+                question: question
+            })
+        }
+    )
+
+    const data = await response.json()
+
+        // SQL 顯示
+                let html = `
+                    <h3>AI 產生的 SQL</h3>
+                    <pre>${data.sql}</pre>
+                `
+
+                // result
+                if(data.result && data.result.length > 0){
+
+                    html += "<h3>查詢結果</h3>"
+
+                    html += "<table border='1' cellpadding='10'>"
+
+                    // table header
+                    html += "<tr>"
+
+                    Object.keys(data.result[0]).forEach(key => {
+                        html += `<th>${key}</th>`
+                    })
+
+                    html += "</tr>"
+
+                    // table body
+                    data.result.forEach(row => {
+
+                        html += "<tr>"
+
+                        Object.values(row).forEach(value => {
+                            html += `<td>${value}</td>`
+                        })
+
+                        html += "</tr>"
+                    })
+
+                    html += "</table>"
+
+                }else{
+
+                    html += "<p>查無資料</p>"
+                }
+
+                resultDiv.innerHTML = html
+
+            }catch(error){
+
+                resultDiv.innerHTML =
+                    "<p>發生錯誤，請稍後再試</p>"
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
