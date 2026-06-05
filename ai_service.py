@@ -68,11 +68,13 @@ OrderItems.order_id
 請根據使用者需求產生 SQL。
 
 規則：
+
 1. 只能使用 SELECT
 2. 不可使用 DELETE、UPDATE、INSERT、DROP
 3. 只回傳 SQL
 4. 不要 markdown
 5. 優先使用 JOIN 語法
+6. 查詢商品名稱時請 JOIN Products
 """
             },
             {
