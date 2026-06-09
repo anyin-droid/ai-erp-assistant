@@ -36,8 +36,23 @@ def execute_sql(sql):
 
     except Exception as e:
 
+        error_message = str(e)
+
+        # 欄位不存在
+        if "no such column" in error_message:
+            return {
+                "error": "查無對應欄位，請確認資料表欄位名稱"
+            }
+
+        # 資料表不存在
+        elif "no such table" in error_message:
+            return {
+                "error": "查無對應資料表"
+            }
+
+        # 其他錯誤
         return {
-            "error": str(e)
+            "error": error_message
         }
 
     finally:

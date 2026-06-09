@@ -103,8 +103,17 @@ try{
     )
 
     const data = await response.json()
-
         // SQL 顯示
+        // 如果有 error
+                if(data.error){
+
+                    resultDiv.innerHTML = `
+                        <h3>錯誤</h3>
+                        <p>${data.error}</p>
+                    `
+
+                    return
+                }
                 let html = `
                     <h3>AI 產生的 SQL</h3>
                     <pre>${data.sql}</pre>

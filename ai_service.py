@@ -75,6 +75,8 @@ OrderItems.order_id
 4. 不要 markdown
 5. 優先使用 JOIN 語法
 6. 查詢商品名稱時請 JOIN Products
+7. 如果資料表不存在對應欄位，請不要猜測欄位名稱
+8. 如果找不到對應欄位，請直接回傳 ERROR
 """
             },
             {

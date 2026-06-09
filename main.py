@@ -30,6 +30,10 @@ def ask_ai(data: AskRequest):
     question = data.question
 
     sql = generate_sql(question)
+    if sql == "ERROR":
+        return {
+            "error": "查無對應欄位或資料"
+        }
 
     db_result = execute_sql(sql)
 
