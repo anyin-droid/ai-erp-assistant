@@ -30,6 +30,27 @@ def ask_ai(data: AskRequest):
     question = data.question
 
     sql = generate_sql(question)
+    # 可查詢資料表白名單
+    allowed_tables = [
+        "Orders",
+        "Products"
+    ]
+
+    # SQL 轉大寫方便比對
+    sql_upper = sql.upper()
+
+    # 檢查 SQL 是否包含禁止資料表
+    blocked = False
+
+    for table in ["Customers", "OrderItems"]:
+
+        if table.upper() in sql_upper:
+            blocked = True
+
+    if blocked:
+        return {
+            "error": "無權限查詢此資料表"
+        }
     if sql == "ERROR":
         return {
             "error": "查無對應欄位或資料"
