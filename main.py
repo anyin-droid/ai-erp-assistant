@@ -40,17 +40,24 @@ def ask_ai(data: AskRequest):
     sql_upper = sql.upper()
 
     # 檢查 SQL 是否包含禁止資料表
-    blocked = False
+    blocked = True
 
-    for table in ["Customers", "OrderItems"]:
+    allowed_tables = [
+        "Orders",
+        "Products"
+    ]
+
+    for table in allowed_tables:
 
         if table.upper() in sql_upper:
-            blocked = True
+            blocked = False
+            break
 
     if blocked:
         return {
             "error": "無權限查詢此資料表"
         }
+    
     if sql == "ERROR":
         return {
             "error": "查無對應欄位或資料"
