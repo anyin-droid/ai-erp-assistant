@@ -47,16 +47,29 @@ def ask_ai(data: AskRequest):
         "Products"
     ]
 
-    for table in allowed_tables:
+    allowed_tables = [
+        "Orders",
+        "Products"
+    ]
+
+    all_tables = [
+        "Orders",
+        "Products",
+        "Customers",
+        "OrderItems"
+    ]
+
+    sql_upper = sql.upper()
+
+    for table in all_tables:
 
         if table.upper() in sql_upper:
-            blocked = False
-            break
 
-    if blocked:
-        return {
-            "error": "無權限查詢此資料表"
-        }
+            if table not in allowed_tables:
+
+                return {
+                    "error": f"無權限查詢資料表：{table}"
+                }
     
     if sql == "ERROR":
         return {
