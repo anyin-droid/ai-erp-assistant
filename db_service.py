@@ -1,7 +1,7 @@
 # db_service.py
 
 import sqlite3
-
+from datetime import datetime
 def execute_sql(sql):
 
     blocked_words = [
@@ -58,3 +58,21 @@ def execute_sql(sql):
     finally:
 
         conn.close()
+        
+def save_query_log(question, sql):
+
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO QueryLogs
+        (question, sql_text, created_at)
+        VALUES (?, ?, ?)
+    """, (
+        question,
+        sql,
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ))
+
+    conn.commit()
+    conn.close()
