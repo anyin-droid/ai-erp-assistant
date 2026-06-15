@@ -3,7 +3,11 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 from ai_service import generate_sql
-from db_service import execute_sql, save_query_log
+from db_service import (
+    execute_sql,
+    save_query_log,
+    get_query_logs
+)
 
 app = FastAPI()
 
@@ -86,4 +90,11 @@ def ask_ai(data: AskRequest):
         "question": question,
         "sql": sql,
         "result": db_result["result"]
+    }
+
+@app.get("/logs")
+def logs():
+
+    return {
+        "logs": get_query_logs()
     }
