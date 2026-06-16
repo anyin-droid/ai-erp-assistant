@@ -52,6 +52,12 @@
     <button onclick="askAI()">
         查詢
     </button>
+    <button onclick="loadLogs()">
+    查看查詢紀錄
+    </button>
+
+<div id="logsDiv"></div>
+
 
     <h2>查詢結果</h2>
 
@@ -63,23 +69,18 @@
 
             const question = document.getElementById("question").value
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/ask",
-                {
-                    method: "POST",
+            const response = await fetch("http://127.0.0.1:8000/ask",{
+                method: "POST",
 
-                    headers:{
+                headers:{
                         "Content-Type":"application/json"
-                    },
-
-                    body: JSON.stringify({
+                },
+                body: JSON.stringify({
                         question: question
-                    })
-                }
-            )
+                })
+            })
 
             const data = await response.json()
-
             const resultDiv = document.getElementById("result")
 
 // Loading
@@ -163,6 +164,45 @@ try{
 
             }
         }
+            async function loadLogs(){
+
+            const response = await fetch(
+            "http://127.0.0.1:8000/logs"
+            )
+
+            const data = await response.json()
+
+            let html = `
+                <h2>查詢紀錄</h2>
+
+                <table border="1" cellpadding="10">
+                    <tr>
+                        <th>ID</th>
+                        <th>問題</th>
+                        <th>SQL</th>
+                        <th>時間</th>
+                    </tr>
+    `
+
+            data.logs.forEach(log => {
+
+                html += `
+                    <tr>
+                        <td>${log.id}</td>
+                        <td>${log.question}</td>
+                        <td>${log.sql_text}</td>
+                        <td>${log.created_at}</td>
+                    </tr>
+                `
+            })
+
+            html += "</table>"
+
+            document.getElementById(
+                "logsDiv"
+            ).innerHTML = html
+            }
+    
 
     </script>
 
