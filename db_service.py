@@ -99,3 +99,33 @@ def get_query_logs():
     conn.close()
 
     return result
+
+def get_dashboard_stats():
+
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    # 總查詢次數
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM QueryLogs
+    """)
+    total_queries = cursor.fetchone()[0]
+
+    # 最近查詢
+    cursor.execute("""
+        SELECT question
+        FROM QueryLogs
+        ORDER BY id DESC
+        LIMIT 1
+    """)
+    latest = cursor.fetchone()
+
+    latest_question = latest[0] if latest else "無資料"
+
+    conn.close()
+
+    return {
+        "total_queries": total_queries,
+        "latest_question": latest_question
+    }

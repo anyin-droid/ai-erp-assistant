@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from db_service import get_dashboard_stats
 
 from ai_service import generate_sql
 from db_service import (
@@ -98,3 +99,8 @@ def logs():
     return {
         "logs": get_query_logs()
     }
+
+@app.get("/stats")
+def stats():
+
+    return get_dashboard_stats()
