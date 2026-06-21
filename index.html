@@ -42,7 +42,17 @@
 <body>
 
     <h1>AI ERP Assistant</h1>
+    <div id="statsDiv" style="
+    border:1px solid #ccc;
+    padding:15px;
+    margin-bottom:20px;
+    ">
+    <h2>AI ERP Dashboard</h2>
 
+    <div id="statsDiv">
+        載入統計資料中...
+    </div>
+    </div>
     <input 
         type="text"
         id="question"
@@ -202,9 +212,35 @@ try{
                 "logsDiv"
             ).innerHTML = html
             }
-    
+            async function loadStats(){
 
+            const response = await fetch(
+                "http://127.0.0.1:8000/stats"
+            )
+
+            const data = await response.json()
+
+            document.getElementById(
+                "statsDiv"
+            ).innerHTML = `
+                <h3>Dashboard Statistics</h3>
+
+                <p>
+                    總查詢次數：
+                    ${data.total_queries}
+                </p>
+
+                <p>
+                    最近查詢：
+                    ${data.latest_question}
+                </p>
+            `
+            }
+    
+    loadStats()
     </script>
 
+
+<hr>
 </body>
 </html>
