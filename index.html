@@ -42,16 +42,18 @@
 <body>
 
     <h1>AI ERP Assistant</h1>
-    <div id="statsDiv" style="
+    <div style="
     border:1px solid #ccc;
     padding:15px;
     margin-bottom:20px;
     ">
+
     <h2>AI ERP Dashboard</h2>
 
     <div id="statsDiv">
         載入統計資料中...
     </div>
+
     </div>
     <input 
         type="text"
@@ -220,9 +222,7 @@ try{
 
             const data = await response.json()
 
-            document.getElementById(
-                "statsDiv"
-            ).innerHTML = `
+            document.getElementById("statsDiv").innerHTML = `
                 <h3>Dashboard Statistics</h3>
 
                 <p>
@@ -233,6 +233,11 @@ try{
                 <p>
                     最近查詢：
                     ${data.latest_question}
+                </p>
+
+                <p>
+                    最常查詢：
+                    ${data.popular_question}
                 </p>
             `
             }

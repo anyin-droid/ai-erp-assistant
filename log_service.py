@@ -65,9 +65,28 @@ def get_dashboard_stats():
 
     latest_question = latest[0] if latest else "無資料"
 
+    # 最常查詢
+    cursor.execute("""
+        SELECT question,
+               COUNT(*) AS total
+        FROM QueryLogs
+        GROUP BY question
+        ORDER BY total DESC
+        LIMIT 1
+    """)
+
+    popular = cursor.fetchone()
+
+    popular_question = (
+        popular[0]
+        if popular
+        else "無資料"
+    )
+
     conn.close()
 
     return {
         "total_queries": total_queries,
-        "latest_question": latest_question
+        "latest_question": latest_question,
+        "popular_question": popular_question
     }
