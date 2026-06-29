@@ -67,7 +67,11 @@
     <button onclick="loadLogs()">
     查看查詢紀錄
     </button>
+    <h3>最近五筆查詢</h3>
 
+    <div id="recentDiv">
+        載入中...
+    </div>
 <div id="logsDiv"></div>
 
 
@@ -229,7 +233,10 @@ try{
                     總查詢次數：
                     ${data.total_queries}
                 </p>
-
+                <p>
+                    今日查詢：
+                    ${data.today_queries}
+                </p>
                 <p>
                     最近查詢：
                     ${data.latest_question}
@@ -241,8 +248,32 @@ try{
                 </p>
             `
             }
+
+            async function loadRecent(){
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/recent"
+            )
+
+            const data = await response.json()
+
+            let html = "<ul>"
+
+            data.recent.forEach(item => {
+
+                html += `<li>${item.question}</li>`
+
+            })
+
+            html += "</ul>"
+
+            document.getElementById(
+                "recentDiv"
+            ).innerHTML = html
+            }
     
     loadStats()
+    loadRecent()
     </script>
 
 

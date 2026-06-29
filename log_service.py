@@ -68,7 +68,7 @@ def get_dashboard_stats():
     # 最常查詢
     cursor.execute("""
         SELECT question,
-               COUNT(*) AS total
+            COUNT(*) AS total
         FROM QueryLogs
         GROUP BY question
         ORDER BY total DESC
@@ -83,10 +83,40 @@ def get_dashboard_stats():
         else "無資料"
     )
 
+    # 今日查詢次數
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM QueryLogs
+        WHERE date(created_at) = date('now')
+    """)
+
+    today_queries = cursor.fetchone()[0]
+
     conn.close()
 
     return {
         "total_queries": total_queries,
+        "today_queries": today_queries,
         "latest_question": latest_question,
         "popular_question": popular_question
     }
+
+def get_recent_queries():
+
+    conn = sqlite3.connect("orders.db")
+    conn.row_factory = sqlite3.Row
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT question
+        FROM QueryLogs
+        ORDER BY id DESC
+        LIMIT 5
+    """)
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return [dict(row) for row in rows]

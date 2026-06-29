@@ -5,10 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from ai_service import generate_sql
 from db_service import execute_sql
 
+
 from log_service import (
     save_query_log,
     get_query_logs,
-    get_dashboard_stats
+    get_dashboard_stats,
+    get_recent_queries
 )
 
 app = FastAPI()
@@ -105,3 +107,10 @@ def logs():
 def stats():
 
     return get_dashboard_stats()
+
+@app.get("/recent")
+def recent():
+
+    return {
+        "recent": get_recent_queries()
+    }
