@@ -6,6 +6,12 @@ Users can query ERP-style data using natural language, and the system automatica
 
 ---
 
+## 🚀 Live Demo
+
+👉 [AI ERP Assistant Demo](https://ai-erp-assistant-kfp9.onrender.com)
+
+---
+
 ## Tech Stack
 
 * Python
