@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from ai_service import generate_sql
 from db_service import execute_sql
@@ -30,9 +31,7 @@ class AskRequest(BaseModel):
 
 @app.get("/")
 def home():
-    return {
-        "message": "AI ERP Assistant API"
-    }
+    return FileResponse("index.html")
 
 @app.post("/ask")
 def ask_ai(data: AskRequest):
