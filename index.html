@@ -1,302 +1,249 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ERP Assistant</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI ERP Assistant</title>
 
-    <style>
-
-        body{
-            font-family: Arial;
-            margin: 40px;
-        }
-
-        input{
-            width: 400px;
-            padding: 10px;
-        }
-
-        button{
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        pre{
-            background-color: #f4f4f4;
-            padding: 15px;
-            border-radius: 10px;
-            table{
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-
-            th{
-                background-color: #f4f4f4;
-            }
-        }
-
-    </style>
-
-</head>
-<body>
-
-    <h1>AI ERP Assistant</h1>
-    <div id="userDiv">
-    載入使用者...
-    </div>
-    <div style="
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:40px;
+}
+input{
+    width:400px;
+    padding:10px;
+}
+button{
+    padding:10px 16px;
+    cursor:pointer;
+    margin-right:8px;
+}
+pre{
+    background:#f4f4f4;
+    padding:15px;
+    border-radius:8px;
+    white-space:pre-wrap;
+}
+table{
+    border-collapse:collapse;
+    margin-top:15px;
+    width:100%;
+}
+th,td{
+    border:1px solid #ddd;
+    padding:8px;
+}
+th{
+    background:#f4f4f4;
+}
+.card{
     border:1px solid #ccc;
     padding:15px;
     margin-bottom:20px;
-    ">
+}
+</style>
+</head>
 
+<body>
+
+<h1>AI ERP Assistant</h1>
+
+<div id="userDiv">載入使用者...</div>
+
+<div class="card">
     <h2>AI ERP Dashboard</h2>
+    <div id="statsDiv">載入統計資料中...</div>
+</div>
 
-    <div id="statsDiv">
-        載入統計資料中...
-    </div>
+<input
+    type="text"
+    id="question"
+    placeholder="請輸入查詢需求">
+<button onclick="askAI()">查詢</button>
+<button onclick="loadLogs()">查看查詢紀錄</button>
 
-    </div>
-    <input 
-        type="text"
-        id="question"
-        placeholder="請輸入查詢需求"
-    >
+<h3>最近五筆查詢</h3>
+<div id="recentDiv">載入中...</div>
 
-    <button onclick="askAI()">
-        查詢
-    </button>
-    <button onclick="loadLogs()">
-    查看查詢紀錄
-    </button>
-    <h3>最近五筆查詢</h3>
-
-    <div id="recentDiv">
-        載入中...
-    </div>
 <div id="logsDiv"></div>
 
+<h2>查詢結果</h2>
+<pre id="result"></pre>
 
-    <h2>查詢結果</h2>
+<script>
 
-    <pre id="result"></pre>
+// =========================
+// AI 查詢
+// =========================
+async function askAI(){
 
-    <script>
+    const question = document.getElementById("question").value;
+    const resultDiv = document.getElementById("result");
 
-        async function askAI(){
+    resultDiv.innerHTML = "AI 查詢中...";
 
-            const question = document.getElementById("question").value
+    try{
 
-            const response = await fetch("http://127.0.0.1:8000/ask",{
-                method: "POST",
-
-                headers:{
-                        "Content-Type":"application/json"
-                },
-                body: JSON.stringify({
-                        question: question
-                })
-            })
-
-            const data = await response.json()
-            const resultDiv = document.getElementById("result")
-
-// Loading
-resultDiv.innerHTML = "AI 查詢中..."
-
-try{
-
-    const response = await fetch(
-        "http://127.0.0.1:8000/ask",
-        {
-            method: "POST",
-
+        const response = await fetch("/ask",{
+            method:"POST",
             headers:{
                 "Content-Type":"application/json"
             },
-
-            body: JSON.stringify({
-                question: question
+            body:JSON.stringify({
+                question:question
             })
+        });
+
+        const data = await response.json();
+
+        if(data.error){
+            resultDiv.innerHTML = `
+                <h3>錯誤</h3>
+                <p>${data.error}</p>
+            `;
+            return;
         }
-    )
 
-    const data = await response.json()
-        // SQL 顯示
-        // 如果有 error
-                if(data.error){
+        let html = `
+            <h3>AI 產生的 SQL</h3>
+            <pre>${data.sql}</pre>
+        `;
 
-                    resultDiv.innerHTML = `
-                        <h3>錯誤</h3>
-                        <p>${data.error}</p>
-                    `
+        if(data.result && data.result.length > 0){
 
-                    return
-                }
-                let html = `
-                    <h3>AI 產生的 SQL</h3>
-                    <pre>${data.sql}</pre>
-                `
+            html += "<h3>查詢結果</h3>";
+            html += "<table>";
 
-                // result
-                if(data.result && data.result.length > 0){
+            html += "<tr>";
+            Object.keys(data.result[0]).forEach(key=>{
+                html += `<th>${key}</th>`;
+            });
+            html += "</tr>";
 
-                    html += "<h3>查詢結果</h3>"
+            data.result.forEach(row=>{
+                html += "<tr>";
+                Object.values(row).forEach(value=>{
+                    html += `<td>${value}</td>`;
+                });
+                html += "</tr>";
+            });
 
-                    html += "<table border='1' cellpadding='10'>"
+            html += "</table>";
 
-                    // table header
-                    html += "<tr>"
-
-                    Object.keys(data.result[0]).forEach(key => {
-                        html += `<th>${key}</th>`
-                    })
-
-                    html += "</tr>"
-
-                    // table body
-                    data.result.forEach(row => {
-
-                        html += "<tr>"
-
-                        Object.values(row).forEach(value => {
-                            html += `<td>${value}</td>`
-                        })
-
-                        html += "</tr>"
-                    })
-
-                    html += "</table>"
-
-                }else{
-
-                    html += "<p>查無資料</p>"
-                }
-
-                resultDiv.innerHTML = html
-
-            }catch(error){
-
-                resultDiv.innerHTML =
-                    "<p>發生錯誤，請稍後再試</p>"
-
-            }
+        }else{
+            html += "<p>查無資料</p>";
         }
-            async function loadLogs(){
 
-            const response = await fetch(
-            "http://127.0.0.1:8000/logs"
-            )
+        resultDiv.innerHTML = html;
 
-            const data = await response.json()
+    }catch(error){
 
-            let html = `
-                <h2>查詢紀錄</h2>
+        console.error(error);
 
-                <table border="1" cellpadding="10">
-                    <tr>
-                        <th>ID</th>
-                        <th>問題</th>
-                        <th>SQL</th>
-                        <th>時間</th>
-                    </tr>
-    `
+        resultDiv.innerHTML = `
+            <h3>發生錯誤</h3>
+            <p>${error}</p>
+        `;
+    }
+}
 
-            data.logs.forEach(log => {
+// =========================
+// 查詢紀錄
+// =========================
+async function loadLogs(){
 
-                html += `
-                    <tr>
-                        <td>${log.id}</td>
-                        <td>${log.question}</td>
-                        <td>${log.sql_text}</td>
-                        <td>${log.created_at}</td>
-                    </tr>
-                `
-            })
+    const response = await fetch("/logs");
+    const data = await response.json();
 
-            html += "</table>"
+    let html = `
+        <h2>查詢紀錄</h2>
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>問題</th>
+            <th>SQL</th>
+            <th>時間</th>
+        </tr>
+    `;
 
-            document.getElementById(
-                "logsDiv"
-            ).innerHTML = html
-            }
-            async function loadStats(){
+    data.logs.forEach(log=>{
+        html += `
+            <tr>
+                <td>${log.id}</td>
+                <td>${log.question}</td>
+                <td>${log.sql_text}</td>
+                <td>${log.created_at}</td>
+            </tr>
+        `;
+    });
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/stats"
-            )
+    html += "</table>";
 
-            const data = await response.json()
+    document.getElementById("logsDiv").innerHTML = html;
+}
 
-            document.getElementById("statsDiv").innerHTML = `
-                <h3>Dashboard Statistics</h3>
+// =========================
+// Dashboard
+// =========================
+async function loadStats(){
 
-                <p>
-                    總查詢次數：
-                    ${data.total_queries}
-                </p>
-                <p>
-                    今日查詢：
-                    ${data.today_queries}
-                </p>
-                <p>
-                    最近查詢：
-                    ${data.latest_question}
-                </p>
+    const response = await fetch("/stats");
+    const data = await response.json();
 
-                <p>
-                    最常查詢：
-                    ${data.popular_question}
-                </p>
-            `
-            }
+    document.getElementById("statsDiv").innerHTML = `
+        <p>總查詢次數：${data.total_queries}</p>
+        <p>今日查詢：${data.today_queries}</p>
+        <p>最近查詢：${data.latest_question}</p>
+        <p>最常查詢：${data.popular_question}</p>
+    `;
+}
 
-            async function loadRecent(){
+// =========================
+// 最近查詢
+// =========================
+async function loadRecent(){
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/recent"
-            )
+    const response = await fetch("/recent");
+    const data = await response.json();
 
-            const data = await response.json()
+    let html = "<ul>";
 
-            let html = "<ul>"
+    data.recent.forEach(item=>{
+        html += `<li>${item.question}</li>`;
+    });
 
-            data.recent.forEach(item => {
+    html += "</ul>";
 
-                html += `<li>${item.question}</li>`
+    document.getElementById("recentDiv").innerHTML = html;
+}
 
-            })
+// =========================
+// 使用者資訊
+// =========================
+async function loadCurrentUser(){
 
-            html += "</ul>"
+    const response = await fetch("/current-user");
+    const data = await response.json();
 
-            document.getElementById(
-                "recentDiv"
-            ).innerHTML = html
-            }
-            
-            async function loadCurrentUser(){
+    document.getElementById("userDiv").innerHTML = `
+        <p>👤 使用者：${data.username}</p>
+        <p>🔑 角色：${data.role}</p>
+    `;
+}
 
-            const response = await fetch(
-                "http://127.0.0.1:8000/current-user"
-            )
+// =========================
+// 初始化
+// =========================
+async function init(){
+    await loadStats();
+    await loadRecent();
+    await loadCurrentUser();
+}
 
-            const data = await response.json()
+init();
 
-            document.getElementById(
-                "userDiv"
-            ).innerHTML = `
-                <p>👤 使用者：${data.username}</p>
-                <p>🔑 角色：${data.role}</p>
-            `
-            }
-    
-    loadStats()
-    loadRecent()
-    loadCurrentUser()
-    </script>
+</script>
 
-
-<hr>
 </body>
 </html>
