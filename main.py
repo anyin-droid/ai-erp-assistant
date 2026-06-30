@@ -13,6 +13,8 @@ from log_service import (
     get_recent_queries
 )
 
+from current_user import CURRENT_USER
+
 app = FastAPI()
 
 app.add_middleware(
@@ -114,3 +116,8 @@ def recent():
     return {
         "recent": get_recent_queries()
     }
+
+@app.get("/current-user")
+def current_user():
+
+    return CURRENT_USER

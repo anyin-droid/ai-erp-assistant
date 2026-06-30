@@ -42,6 +42,9 @@
 <body>
 
     <h1>AI ERP Assistant</h1>
+    <div id="userDiv">
+    載入使用者...
+    </div>
     <div style="
     border:1px solid #ccc;
     padding:15px;
@@ -271,9 +274,26 @@ try{
                 "recentDiv"
             ).innerHTML = html
             }
+            
+            async function loadCurrentUser(){
+
+            const response = await fetch(
+                "http://127.0.0.1:8000/current-user"
+            )
+
+            const data = await response.json()
+
+            document.getElementById(
+                "userDiv"
+            ).innerHTML = `
+                <p>👤 使用者：${data.username}</p>
+                <p>🔑 角色：${data.role}</p>
+            `
+            }
     
     loadStats()
     loadRecent()
+    loadCurrentUser()
     </script>
 
 
