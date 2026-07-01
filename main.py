@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from user_service import get_current_user
+from fastapi.staticfiles import StaticFiles
 
 from ai_service import generate_sql
 from db_service import execute_sql
@@ -17,6 +18,7 @@ from log_service import (
 
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,7 +33,7 @@ class AskRequest(BaseModel):
 
 @app.get("/")
 def home():
-    return FileResponse("index.html")
+    return FileResponse("static/index.html")
 
 @app.post("/ask")
 def ask_ai(data: AskRequest):
