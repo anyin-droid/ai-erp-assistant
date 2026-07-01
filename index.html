@@ -153,7 +153,7 @@ async function askAI(){
 // =========================
 async function loadLogs(){
 
-    const response = await fetch("/logs");
+    const response = await fetch("http://127.0.0.1:8000/logs");
     const data = await response.json();
 
     let html = `
@@ -188,7 +188,7 @@ async function loadLogs(){
 // =========================
 async function loadStats(){
 
-    const response = await fetch("/stats");
+    const response = await fetch("http://127.0.0.1:8000/stats");
     const data = await response.json();
 
     document.getElementById("statsDiv").innerHTML = `
@@ -204,7 +204,7 @@ async function loadStats(){
 // =========================
 async function loadRecent(){
 
-    const response = await fetch("/recent");
+    const response = await fetch("http://127.0.0.1:8000/recent");
     const data = await response.json();
 
     let html = "<ul>";
@@ -223,7 +223,7 @@ async function loadRecent(){
 // =========================
 async function loadCurrentUser(){
 
-    const response = await fetch("/current-user");
+    const response = await fetch("http://127.0.0.1:8000/current-user");
     const data = await response.json();
 
     document.getElementById("userDiv").innerHTML = `

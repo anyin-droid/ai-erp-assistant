@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from user_service import get_current_user
 
 from ai_service import generate_sql
 from db_service import execute_sql
@@ -14,7 +15,6 @@ from log_service import (
     get_recent_queries
 )
 
-from current_user import CURRENT_USER
 
 app = FastAPI()
 
@@ -116,7 +116,8 @@ def recent():
         "recent": get_recent_queries()
     }
 
+
 @app.get("/current-user")
 def current_user():
 
-    return CURRENT_USER
+    return get_current_user()
