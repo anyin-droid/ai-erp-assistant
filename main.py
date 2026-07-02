@@ -31,6 +31,9 @@ app.add_middleware(
 class AskRequest(BaseModel):
     question: str
 
+class LoginRequest(BaseModel):
+    username: str
+    
 @app.get("/")
 def home():
     return FileResponse("static/index.html")
@@ -123,3 +126,8 @@ def recent():
 def current_user():
 
     return get_current_user()
+
+@app.get("/login")
+def login_page():
+
+    return FileResponse("static/login.html")
