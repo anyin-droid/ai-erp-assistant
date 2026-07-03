@@ -33,7 +33,7 @@ class AskRequest(BaseModel):
 
 class LoginRequest(BaseModel):
     username: str
-    
+
 @app.get("/")
 def home():
     return FileResponse("static/index.html")
@@ -131,3 +131,12 @@ def current_user():
 def login_page():
 
     return FileResponse("static/login.html")
+
+@app.post("/login")
+def login(data: LoginRequest):
+
+    return {
+        "success": True,
+        "username": data.username,
+        "role": "Admin"
+    }
