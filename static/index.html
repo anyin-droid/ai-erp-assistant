@@ -50,7 +50,11 @@ th{
 <h1>AI ERP Assistant</h1>
 
 <div id="userDiv">載入使用者...</div>
+<div id="userDiv"></div>
 
+<button onclick="logout()">
+    登出
+</button>
 <div class="card">
     <h2>AI ERP Dashboard</h2>
     <div id="statsDiv">載入統計資料中...</div>
@@ -80,6 +84,7 @@ async function askAI(){
 
     const question = document.getElementById("question").value;
     const resultDiv = document.getElementById("result");
+    const username = localStorage.getItem("username");
 
     resultDiv.innerHTML = "AI 查詢中...";
 
@@ -90,8 +95,9 @@ async function askAI(){
             headers:{
                 "Content-Type":"application/json"
             },
-            body:JSON.stringify({
-                question:question
+            body: JSON.stringify({
+                question: question,
+                username: username
             })
         });
 
@@ -221,15 +227,31 @@ async function loadRecent(){
 // =========================
 // 使用者資訊
 // =========================
-async function loadCurrentUser(){
+function loadCurrentUser(){
 
-    const response = await fetch("/current-user");
-    const data = await response.json();
+    const username = localStorage.getItem("username");
+    const role = localStorage.getItem("role");
 
     document.getElementById("userDiv").innerHTML = `
-        <p>👤 使用者：${data.username}</p>
-        <p>🔑 角色：${data.role}</p>
+        <p>👤 使用者：${username}</p>
+        <p>🔑 角色：${role}</p>
     `;
+}
+
+const username = localStorage.getItem("username");
+
+if(!username){
+    window.location.href = "/login";
+}
+
+
+function logout(){
+
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+
+    window.location.href = "/login";
+
 }
 
 // =========================

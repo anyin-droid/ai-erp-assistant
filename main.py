@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 from ai_service import generate_sql
 from db_service import execute_sql
-
+from user_service import check_user
 
 from log_service import (
     save_query_log,
@@ -30,6 +30,7 @@ app.add_middleware(
 
 class AskRequest(BaseModel):
     question: str
+    username: str
 
 class LoginRequest(BaseModel):
     username: str
@@ -42,6 +43,10 @@ def home():
 def ask_ai(data: AskRequest):
 
     question = data.question
+    username = data.username
+
+    print("目前登入者：", username)
+    
 
     sql = generate_sql(question)
     # 可查詢資料表白名單
@@ -135,8 +140,16 @@ def login_page():
 @app.post("/login")
 def login(data: LoginRequest):
 
+    user = check_user(data.username)
+
+    if not user:
+        return {
+            "success": False,
+            "message": "使用者不存在"
+        }
+
     return {
         "success": True,
-        "username": data.username,
-        "role": "Admin"
+        "username": user[0],
+        "role": user[1]
     }
