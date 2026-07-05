@@ -35,3 +35,23 @@ def check_user(username):
     conn.close()
 
     return user
+
+def get_user_role(username):
+
+    conn = sqlite3.connect("orders.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT role
+        FROM Users
+        WHERE username = ?
+    """, (username,))
+
+    result = cursor.fetchone()
+
+    conn.close()
+
+    if result:
+        return result[0]
+
+    return None

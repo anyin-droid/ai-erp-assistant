@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from ai_service import generate_sql
 from db_service import execute_sql
 from user_service import check_user
+from user_service import get_user_role
 
 from log_service import (
     save_query_log,
@@ -45,38 +46,51 @@ def ask_ai(data: AskRequest):
     question = data.question
     username = data.username
 
-    print("目前登入者：", username)
+    role = get_user_role(username)
+
+    print("使用者：", username)
+    print("角色：", role)
     
 
     sql = generate_sql(question)
-    # 可查詢資料表白名單
-    allowed_tables = [
-        "Orders",
-        "Products"
-    ]
 
-    # SQL 轉大寫方便比對
+    if sql == "ERROR":
+        return {
+            "error": f"{role} 無權限查詢資料表：{table}"
+        }
+
     sql_upper = sql.upper()
+    role_permissions = {
+        "Admin": [
+            "Orders",
+            "Products",
+            "Customers",
+            "OrderItems"
+        ],
+        "Sales": [
+            "Orders",
+            "Customers"
+        ],
+        "Purchase": [
+            "Products",
+            "OrderItems"
+        ]
+    }
 
-    # 檢查 SQL 是否包含禁止資料表
-    blocked = True
+    allowed_tables = role_permissions.get(role)
 
-    allowed_tables = [
-        "Orders",
-        "Products"
-    ]
-
-    allowed_tables = [
-        "Orders",
-        "Products"
-    ]
-
+    if not allowed_tables:
+        return {
+            "error": "未知角色"
+        }
+    
     all_tables = [
         "Orders",
         "Products",
         "Customers",
         "OrderItems"
     ]
+    
 
     sql_upper = sql.upper()
 
