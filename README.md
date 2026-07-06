@@ -1,8 +1,7 @@
 # AI ERP Assistant
 
-<img width="1342" height="878" alt="螢幕擷取畫面 2026-07-06 203547" src="https://github.com/user-attachments/assets/7da3899b-023f-4da8-949d-c430045a763a" />
 <img width="1351" height="874" alt="螢幕擷取畫面 2026-07-06 203555" src="https://github.com/user-attachments/assets/cc5cff93-7311-4fd7-b06c-e6248bf79365" />
-
+<img width="1342" height="878" alt="螢幕擷取畫面 2026-07-06 203547" src="https://github.com/user-attachments/assets/7da3899b-023f-4da8-949d-c430045a763a" />
 
 An AI-powered ERP query assistant that converts natural language into SQL using **OpenAI GPT-4.1-mini**.
 
