@@ -130,20 +130,33 @@ OrderItems
 
 # 📂 Project Structure
 
-```
+```text
 ai-erp-assistant/
-
 │
-├── main.py
-├── ai_service.py
-├── db_service.py
-├── index.html
-├── orders.db
-├── requirements.txt
-└── .env
-```
-
----
+├── main.py                  # FastAPI main application
+├── ai_service.py             # OpenAI API and SQL generation logic
+├── db_service.py             # Database connection and query execution
+├── user_service.py           # User-related service logic
+├── log_service.py            # Query log service
+├── current_user.py           # Current user / role handling
+│
+├── static/
+│   ├── index.html            # Main AI ERP query page
+│   └── login.html            # Login page
+│
+├── orders.db                 # SQLite database
+├── requirements.txt          # Python dependencies
+├── README.md                 # Project documentation
+├── .env                      # Environment variables
+├── .gitignore
+│
+├── create_users.py           # Script to create users
+├── insert_users.py           # Script to insert user data
+├── create_querylogs.py       # Script to create query log table
+├── check_users.py            # Script to check user data
+├── check_querylogs.py        # Script to check query logs
+├── check_logs.py             # Script to check logs
+└── delete_user.py            # Script to delete user data
 
 # ⚙️ How It Works
 
