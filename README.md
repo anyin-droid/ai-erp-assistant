@@ -1,7 +1,8 @@
 # AI ERP Assistant
 
-<img width="1351" height="874" alt="螢幕擷取畫面 2026-07-06 203555" src="https://github.com/user-attachments/assets/cc5cff93-7311-4fd7-b06c-e6248bf79365" />
-<img width="1342" height="878" alt="螢幕擷取畫面 2026-07-06 203547" src="https://github.com/user-attachments/assets/7da3899b-023f-4da8-949d-c430045a763a" />
+<img width="1345" height="874" alt="螢幕擷取畫面 2026-07-07 210740" src="https://github.com/user-attachments/assets/c7ea8c2c-6ad4-4cd7-98e4-9f817cd57e61" />
+<img width="1190" height="876" alt="螢幕擷取畫面 2026-07-07 210731" src="https://github.com/user-attachments/assets/eff3e4ba-5f88-4a98-a506-1c8e84f81a62" />
+
 
 An AI-powered ERP query assistant that converts natural language into SQL using **OpenAI GPT-4.1-mini**.
 
@@ -157,6 +158,14 @@ ai-erp-assistant/
 ├── check_querylogs.py        # Script to check query logs
 ├── check_logs.py             # Script to check logs
 └── delete_user.py            # Script to delete user data
+
+## Demo Accounts
+
+| Username |   Role    |
+|----------|-----------|
+| Andy     | Admin     |
+| Amy      | Sales     |
+| John     | Purchase  |
 
 # ⚙️ How It Works
 
