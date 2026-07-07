@@ -1,9 +1,5 @@
 # AI ERP Assistant
 
-<img width="1190" height="876" alt="螢幕擷取畫面 2026-07-07 210731" src="https://github.com/user-attachments/assets/eff3e4ba-5f88-4a98-a506-1c8e84f81a62" />
-<img width="1345" height="874" alt="螢幕擷取畫面 2026-07-07 210740" src="https://github.com/user-attachments/assets/c7ea8c2c-6ad4-4cd7-98e4-9f817cd57e61" />
-
-
 An AI-powered ERP query assistant that converts natural language into SQL using **OpenAI GPT-4.1-mini**.
 
 This project simulates a real-world ERP query workflow. Users enter questions in natural language, and the system automatically generates SQL, executes the query, and returns formatted results.
@@ -18,9 +14,8 @@ This project simulates a real-world ERP query workflow. Users enter questions in
 
 ## 📷 Project Preview
 
-> *(Add screenshots here later)*
-
-![Home Page](images/home.png)
+<img width="1190" height="876" alt="螢幕擷取畫面 2026-07-07 210731" src="https://github.com/user-attachments/assets/eff3e4ba-5f88-4a98-a506-1c8e84f81a62" />
+<img width="1345" height="874" alt="螢幕擷取畫面 2026-07-07 210740" src="https://github.com/user-attachments/assets/c7ea8c2c-6ad4-4cd7-98e4-9f817cd57e61" />
 
 ---
 
