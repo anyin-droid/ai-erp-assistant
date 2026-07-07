@@ -55,7 +55,6 @@ th{
 
     <!-- =========================Dashboard========================== -->
 
-    <h2 class="mb-3">Dashboard</h2>
     <div class="row g-3 mb-4">
 
         <!-- 總查詢 -->
@@ -139,7 +138,7 @@ th{
             </h3>
             <div id="result">
 
-                尚未查詢
+                請輸入自然語言開始查詢。
 
             </div>
         </div>
@@ -174,7 +173,12 @@ th{
         </div>
     </div>
 </div>
-
+<hr>
+<div class="text-center text-muted mt-5 mb-3">
+AI ERP Assistant
+<br>
+Python ・ FastAPI ・ SQLite ・ OpenAI ・ Bootstrap
+</div>
 
 <script>
 
@@ -187,7 +191,17 @@ async function askAI(){
     const resultDiv = document.getElementById("result");
     const username = localStorage.getItem("username");
 
-    resultDiv.innerHTML = "AI 查詢中...";
+    resultDiv.innerHTML = `
+    <div class="text-center">
+
+        <div class="spinner-border text-primary"></div>
+
+        <p class="mt-3">
+            AI 查詢中...
+        </p>
+
+    </div>
+    `;
 
     try{
 
@@ -239,8 +253,19 @@ async function askAI(){
             html += "</table>";
 
         }else{
-            html += "<p>查無資料</p>";
+            html += `<div class="alert alert-warning">
+
+            沒有符合條件的資料。
+
+            </div>`;
         }
+        html =`<div class="alert alert-success">
+
+        ✅ 查詢完成
+
+        共找到 ${data.result.length} 筆資料
+
+        </div>`+ html;
 
         resultDiv.innerHTML = html;
 
@@ -370,6 +395,9 @@ function loadCurrentUser(){
             AI ERP Demo Environment
         </small>
     `;
+    document.getElementById(
+    "currentRole"
+    ).innerHTML = role;
 }
 
 const username = localStorage.getItem("username");
