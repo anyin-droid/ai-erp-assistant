@@ -303,7 +303,15 @@ async function loadLogs(){
         html += `
             <tr>
                 <td>${log.id}</td>
-                <td>${log.question}</td>
+                <td>
+                    ${log.question}
+
+                    <button
+                        onclick="reuseQuestion('${log.question}')"
+                        class="btn btn-sm btn-outline-primary ms-2">
+                        帶入查詢
+                    </button>
+                </td>
                 <td>${log.sql_text}</td>
                 <td>${log.created_at}</td>
             </tr>
@@ -346,11 +354,20 @@ async function loadRecent(){
 
     const response = await fetch("/recent");
     const data = await response.json();
-
-    let html = "<ul>";
+    let html = '<ul class="list-group">';
 
     data.recent.forEach(item=>{
-        html += `<li>${item.question}</li>`;
+
+        html += `
+            <li
+                class="list-group-item list-group-item-action"
+                style="cursor:pointer"
+                onclick="reuseQuestion('${item.question}')"
+            >
+                ${item.question}
+            </li>
+        `;
+
     });
 
     html += "</ul>";
@@ -425,8 +442,28 @@ async function init(){
     await loadCurrentUser();
 }
 
+//案enter搜尋
+document
+.getElementById("question")
+.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter"){
+
+        askAI();
+
+    }
+
+});
+
 init();
 
+function reuseQuestion(question){
+
+        document.getElementById(
+            "question"
+        ).value = question;
+
+}
 </script>
 
 </body>
